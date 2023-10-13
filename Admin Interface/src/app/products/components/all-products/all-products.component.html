@@ -1,0 +1,201 @@
+<div class="mt-5">
+  <div class="my-2 w-25">
+    <button (click)="productsService.addModal = true" class="btn btn-success">
+      Add Product
+    </button>
+  </div>
+  <div class="cart-box" *ngIf="!loading">
+    <table class="table table-striped mt-2">
+      <thead>
+        <tr>
+          <th></th>
+          <th>Name</th>
+          <th>Category</th>
+          <th>Price</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let product of allProducts">
+          <td>
+            <img src="{{ product.image }}" alt="" />
+          </td>
+          <td>{{ product.title }}</td>
+          <td>{{ product.category }}</td>
+          <td>{{ product.price }} L.E</td>
+          <td>
+            <button
+              (click)="
+                update(product); productsService.updateModal = true
+              "
+              class="btn btn-warning"
+            >
+              Update
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="d-flex justify-content-center align-items-center" *ngIf="loading">
+    <app-spinner></app-spinner>
+  </div>
+</div>
+
+<div
+  class="view-popup"
+  *ngIf="productsService.addModal"
+  (click)="onClick($event)"
+>
+  <div class="content">
+    <button class="close" (click)="closeModal()">X</button>
+    <h3>Add Product</h3>
+    <form class="p-3" [formGroup]="productFormAdd">
+      <div class="row">
+        <div class="col-md-6 col-sm-12">
+          <label for="title">Title</label>
+          <input
+            type="text"
+            class="form-control"
+            id="title"
+            placeholder="Title"
+            formControlName="title"
+          />
+        </div>
+        <div class="col-md-6 col-sm-12">
+          <label for="price">Price</label>
+          <input
+            type="number"
+            class="form-control"
+            id="price"
+            placeholder="Price"
+            formControlName="price"
+          />
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 col-sm-12">
+          <app-select
+            [data]="allCategories"
+            [title]="'Categories'"
+            [all]="false"
+            (selectedCategory)="getCategoryAdd($event)"
+          ></app-select>
+        </div>
+        <div class="col-md-6 col-sm-12">
+          <label for="desc">Description</label>
+          <textarea
+            type="text"
+            id="desc"
+            placeholder="Description"
+            class="form-control"
+            formControlName="description"
+          ></textarea>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 col-sm-12">
+          <label for="image">Image</label>
+          <input
+            type="file"
+            id="image"
+            class="form-control"
+            (change)="getImagePath($event)"
+          />
+        </div>
+        <div class="col-md-6 col-sm-12 image-container">
+          <img src="{{ base64 }}" alt="" class="img-fluid rounded" />
+        </div>
+      </div>
+      <div class="button-container">
+        <button
+          type="submit"
+          class="btn btn-success"
+          [disabled]="productFormAdd.invalid"
+          (click)="addProduct()"
+        >
+          Add Product
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+<div
+  class="view-popup"
+  *ngIf="productsService.updateModal"
+  (click)="onClick($event)"
+>
+  <div class="content">
+    <button class="close" (click)="closeModal()">X</button>
+    <h3>Update Product</h3>
+    <form class="p-3" [formGroup]="productFormUpdate">
+      <div class="row">
+        <div class="col-md-6 col-sm-12">
+          <label for="title">Title</label>
+          <input
+            type="text"
+            class="form-control"
+            id="title"
+            placeholder="Title"
+            formControlName="title"
+          />
+        </div>
+        <div class="col-md-6 col-sm-12">
+          <label for="price">Price</label>
+          <input
+            type="number"
+            class="form-control"
+            id="price"
+            placeholder="Price"
+            formControlName="price"
+          />
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 col-sm-12">
+          <app-select
+            [data]="allCategories"
+            [title]="'Categories'"
+            [all]="false"
+            [select]="productFormUpdate.get('category')?.value"
+            (selectedCategory)="getCategoryUpdate($event)"
+          ></app-select>
+        </div>
+        <div class="col-md-6 col-sm-12">
+          <label for="desc">Description</label>
+          <textarea
+            type="text"
+            id="desc"
+            placeholder="Description"
+            class="form-control"
+            formControlName="description"
+          ></textarea>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 col-sm-12">
+          <label for="image">Image</label>
+          <input
+            type="file"
+            id="image"
+            class="form-control"
+            (change)="getImagePath($event)"
+          />
+        </div>
+        <div class="col-md-6 col-sm-12 image-container">
+          <img src="{{ base64 }}" alt="" class="img-fluid rounded" />
+        </div>
+      </div>
+      <div class="button-container">
+        <button
+          type="submit"
+          class="btn btn-success"
+          [disabled]="productFormUpdate.invalid"
+          (click)="updateProduct()"
+        >
+          Update Product
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

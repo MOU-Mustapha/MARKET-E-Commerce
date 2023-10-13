@@ -1,0 +1,22 @@
+.row {
+  width: 90%;
+  margin: 50px auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  img {
+    width: 100%;
+    max-height: 450px;
+    object-fit: cover;
+    object-position: top;
+  }
+  .info {
+    text-align: center;
+  }
+  ul {
+    li {
+      font-size: 22px;
+      margin: 20px 0;
+    }
+  }
+}

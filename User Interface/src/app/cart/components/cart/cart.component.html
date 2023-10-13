@@ -1,0 +1,67 @@
+<div class="cart-box">
+  <h1 class="text-danger">Shopping Cart</h1>
+  <div class="cart-head">
+    <p class="lead">
+      You Have
+      <label class="text-danger">{{ cartProducts.length }}</label> Items In Your
+      Cart
+    </p>
+    <span *ngIf="showCart" (click)="clearCart()" class="text-danger cart-header"
+      >Clear Shopping Cart</span
+    >
+  </div>
+  <div *ngIf="showCart">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th></th>
+          <th>Name</th>
+          <th>Price</th>
+          <th style="width: 25%">Quantity</th>
+          <th>Total</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let cartProduct of cartProducts; let i = index">
+          <td>
+            <img src="{{ cartProduct.item.image }}" alt="" />
+          </td>
+          <td>{{ cartProduct.item.title }}</td>
+          <td>{{ cartProduct.item.price.toFixed(2) }} L.E</td>
+          <td>
+            <div class="quantity">
+              <button (click)="plusAmount(i)" class="btn btn-dark">+</button>
+              <input
+                type="number"
+                class="form-control"
+                min="1"
+                [(ngModel)]="cartProduct.quantity"
+                (change)="detectAmountChange()"
+              />
+              <button (click)="minsAmount(i)" class="btn btn-dark">-</button>
+            </div>
+          </td>
+          <td>
+            {{ (cartProduct.item.price * cartProduct.quantity).toFixed(2) }} L.E
+          </td>
+          <td>
+            <button (click)="deleteCartProduct(i)" class="btn btn-danger">
+              Delete
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="totalPrice">
+      <span>Total: {{ totalPrice.toFixed(2) }} L.E</span>
+      <button (click)="addCart()" class="btn btn-success">Order Now</button>
+    </div>
+  </div>
+  <div class="d-flex justify-content-center" *ngIf="loading" >
+    <app-spinner></app-spinner>
+  </div>
+</div>
+<div class="alert alert-success" role="alert" *ngIf="orderSuccess">
+  <strong>Well Done...!</strong> Your Order Is Successfully Sent
+</div>

@@ -1,0 +1,103 @@
+<div class="cart-box">
+  <div *ngIf="!loading">
+    <form [formGroup]="dateForm" (ngSubmit)="apply()">
+      <div class="row">
+        <div class="col-md-3">
+          <label for="start">Start Date: </label>
+          <input
+            type="date"
+            class="form-control"
+            id="start"
+            formControlName="start"
+          />
+        </div>
+        <div class="col-md-3">
+          <label for="end">End Date: </label>
+          <input
+            type="date"
+            class="form-control"
+            id="end"
+            formControlName="end"
+          />
+        </div>
+        <div class="col-md-2 d-flex align-items-end">
+          <button type="submit" class="btn btn-success">Apply</button>
+        </div>
+      </div>
+    </form>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Quantity</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let cart of carts; let i = index">
+          <td>{{ cart.date | date : "longDate" }}</td>
+          <td>
+            {{ cart.products.length }}
+          </td>
+          <td>
+            <button class="btn btn-danger me-2" (click)="deleteCart(cart.id)">
+              Delete
+            </button>
+            <button
+              class="btn btn-primary"
+              (click)="viewProducts(i); cartService.showModal = true"
+            >
+              View
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="d-flex justify-content-center align-items-center" *ngIf="loading">
+    <app-spinner></app-spinner>
+  </div>
+</div>
+
+<div class="view-popup" *ngIf="cartService.showModal" (click)="onClick($event)">
+  <div class="content">
+    <button class="close" (click)="closeModal()">X</button>
+    <div class="cart-box">
+      <div *ngIf="!loading">
+        <table class="table table-striped mt-2">
+          <thead>
+            <tr>
+              <th></th>
+              <th>Name</th>
+              <th>Price</th>
+              <th style="width: 25%">Quantity</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let cartProduct of cartProducts">
+              <td>
+                <img src="{{ cartProduct.item.image }}" alt="" />
+              </td>
+              <td>{{ cartProduct.item.title }}</td>
+              <td>{{ cartProduct.item.price.toFixed(2) }} L.E</td>
+              <td>
+                {{ cartProduct.quantity }}
+              </td>
+              <td>
+                {{ (cartProduct.item.price * cartProduct.quantity).toFixed(2) }}
+                L.E
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div
+        class="d-flex justify-content-center align-items-center"
+        *ngIf="loading"
+      >
+        <app-spinner></app-spinner>
+      </div>
+    </div>
+  </div>
+</div>
